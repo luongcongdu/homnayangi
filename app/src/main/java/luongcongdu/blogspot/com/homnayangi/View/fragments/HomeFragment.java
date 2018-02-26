@@ -1,6 +1,7 @@
 package luongcongdu.blogspot.com.homnayangi.View.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.android.volley.RequestQueue;
@@ -18,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +33,9 @@ import luongcongdu.blogspot.com.homnayangi.Adapter.FoodAdapter;
 import luongcongdu.blogspot.com.homnayangi.Model.Food;
 import luongcongdu.blogspot.com.homnayangi.R;
 import luongcongdu.blogspot.com.homnayangi.Utils.Server;
+import luongcongdu.blogspot.com.homnayangi.View.activity.DetailsFoodActivity;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,14 +66,14 @@ public class HomeFragment extends Fragment {
         viewFlipper = view.findViewById(R.id.flipper_home);
         recyclerHome = view.findViewById(R.id.recycler_home);
 
-        viewFlipper.setFlipInterval(5000);
-        viewFlipper.setAutoStart(true);
-        viewFlipper.startFlipping();//
-
-        Animation slide_in = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
-        Animation slide_out = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_right);
-        viewFlipper.setInAnimation(slide_in);
-        viewFlipper.setOutAnimation(slide_out);
+//        viewFlipper.setFlipInterval(5000);
+//        viewFlipper.setAutoStart(true);
+//        viewFlipper.startFlipping();//
+//
+//        Animation slide_in = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
+//        Animation slide_out = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_right);
+//        viewFlipper.setInAnimation(slide_in);
+//        viewFlipper.setOutAnimation(slide_out);
 
         listFood = new ArrayList<>();
         foodAdapter = new FoodAdapter(getActivity(), listFood);
@@ -75,6 +82,7 @@ public class HomeFragment extends Fragment {
         recyclerHome.setAdapter(foodAdapter);
 
         getFood();
+
 
         return view;
     }
@@ -114,6 +122,7 @@ public class HomeFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
+                    setViewFlipper(listFood);
 
                 }
             }
@@ -125,6 +134,45 @@ public class HomeFragment extends Fragment {
         });
 
         requestQueue.add(jsonArrayRequest);
+    }
+
+    public void setViewFlipper(final ArrayList<Food> listFood) {
+        viewFlipper.removeAllViews();
+        for (int i = 0; i < 5; i++) {
+
+            LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
+            View view = layoutInflater.inflate(R.layout.item_view_flipper, null);
+
+
+            ImageView imageView = view.findViewById(R.id.img_view_flipper);
+            Picasso.with(getActivity()).load(listFood.get(i).getImage()).into(imageView);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            TextView txtFoodName = view.findViewById(R.id.txt_food_name);
+            txtFoodName.setText(listFood.get(i).getName());
+            TextView txtFoodTime = view.findViewById(R.id.txt_food_time);
+            txtFoodTime.setText(String.valueOf(listFood.get(i).getTime()) + " phút");
+            viewFlipper.addView(view);
+        }
+
+        viewFlipper.setFlipInterval(5000);
+        viewFlipper.setAutoStart(true);
+        viewFlipper.startFlipping();//
+
+        Animation slide_in = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
+        Animation slide_out = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_right);
+        viewFlipper.setInAnimation(slide_in);
+        viewFlipper.setOutAnimation(slide_out);
+
+        viewFlipper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int focus = viewFlipper.getDisplayedChild();
+                Intent intent = new Intent(getActivity(), DetailsFoodActivity.class);
+                intent.putExtra("DETAIL_FOOD", listFood.get(focus));
+                startActivity(intent);
+            }
+        });
 
     }
 

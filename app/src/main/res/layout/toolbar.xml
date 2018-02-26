@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:ellipsize="end"
         android:gravity="start"
+        android:maxLines="1"
         android:text="Toolbar Title"
         android:textColor="#fff"
         android:textSize="18dp" />

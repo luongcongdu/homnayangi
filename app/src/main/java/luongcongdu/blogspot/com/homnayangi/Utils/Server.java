@@ -10,4 +10,5 @@ public class Server {
     public static String getuser = http + localhost + "/server/getuser.php";
     public static String getfood = http + localhost + "/server/getfood.php";
     public static String getfoodtype = http + localhost + "/server/getfoodtype.php";
+    public static String getarticle = http + localhost + "/server/getarticle.php";
 }
