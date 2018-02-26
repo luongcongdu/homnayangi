@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment {
                     String material = "";
                     String recipe = "";
                     int time = 0;
-                    int idFood = 0;
+                    int idFoodType = 0;
 
                     for (int i = 0; i < response.length(); i++) {
                         try {
@@ -106,8 +106,8 @@ public class HomeFragment extends Fragment {
                             material = jsonObject.getString("material");
                             recipe = jsonObject.getString("recipe");
                             time = jsonObject.getInt("time");
-                            idFood = jsonObject.getInt("idfoodtype");
-                            listFood.add(new Food(id, name, image, descrip, material, recipe, time, idFood));
+                            idFoodType = jsonObject.getInt("idfoodtype");
+                            listFood.add(new Food(id, name, image, descrip, material, recipe, time, idFoodType));
                             foodAdapter.notifyDataSetChanged();
 
                         } catch (JSONException e) {

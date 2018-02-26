@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="luongcongdu.blogspot.com.homnayangi.View.activity.DetailsFoodActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+        <ImageView
+            android:id="@+id/img_icon"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ct1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giới thiệu:"
+                android:textColor="@color/text_focus"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_descrip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bánh quy chocolate giòn tan, thơm béo có thể bảo quản kín dùng dần trong thời gian dài. Với cách làm này bạn có thể thỏa thích làm ra nhiều mẻ bánh ngon lành cho cả nhà nhé!"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thời gian thực hiện: "
+                    android:textColor="@color/text_focus"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/txt_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="45 phút"
+                    android:textColor="@color/text_default"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nguyên liệu:"
+                android:textColor="@color/text_focus"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_material"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bột mì 300 gr Muối nở (Baking soda) 1/2 muỗng cà phê Muối 1/2 muỗng cà phê Bơ 170 gr Đường nâu 200 gr Đường trắng 100 gr Trứng gà 1 quả Lòng đỏ trứng gà 1 cái Tinh chất vani 2 muỗng cà phê Chocolate đen 250 gr"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cách làm:"
+                android:textColor="@color/text_focus"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_recipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bước 1 Mở trước lò nướng ở 170 độ C (325 độ F). Đặt giá ở giữa lò nếu là lò nhỏ, hoặc 1 giá phía trên (còn chừa 1 nấc trên cùng), 1 giá phía dưới (còn chừa 1 nấc dưới cùng) nếu là lò lớn. Lót giấy chống dính vào khay. Trộn đều 300g bột mì, 1/2 muỗng cà phê muối, 1/2 muỗng cà phê muối nở (baking soda). Để sang 1 bên. Dùng máy đánh đều 170g bơ mềm và 2 loại đường cho đến khi chúng thật hòa quyện. Cho tình chất vani và trứng vào (chia làm 2 lần), khuấy thật đều. Chế hỗn hợp bột vào, trộn thật đều (dùng máy thì đánh ở tốc độ thấp nhất khoảng 20 giây). Dùng phới trộn chocolate chip vào hỗn hợp. Bánh quy chocolate giòn tan Bước 2 Cân khỏang 60g hỗn hợp bột, vo thành viên tròn. Hỗn hợp này sẽ cho ra khỏang 18 viên. Dùng đầu ngón tay kéo mỗi viên bột thành 2 phần bằng nhau. Xoay mỗi phần 90 độ và chụm 2 đầu tròn vào nhau, mặt nứt ở phía trên, cẩn thận đừng làm mượt phần phía trên. Đặt các viên bánh cách nhau 5cm trên khay. Bánh quy chocolate giòn tan Bước 3 Nướng cho đến khi bánh vàng đều, thành bánh cứng nhưng bên trong vẫn còn mềm xốp, khỏang 15-18 phút. Nếu lò lớn và nướng 2 khay 1 lúc thì ở giữa thời gian, bạn chuyển vị trí 2 khay cho nhau, cùng lúc xoay khay bánh 180 độ. Dùng dao dẹt nhấc bánh đã chín ra giá, để nguội. Giữ kín trong túi zip-lock, hoặc lọ (có thể nhét chung 1 mẩu bánh mì cho bánh được mềm và không bị ỉu)"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

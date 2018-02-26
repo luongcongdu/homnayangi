@@ -1,12 +1,14 @@
 package luongcongdu.blogspot.com.homnayangi.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 import luongcongdu.blogspot.com.homnayangi.Model.Food;
 import luongcongdu.blogspot.com.homnayangi.R;
+import luongcongdu.blogspot.com.homnayangi.View.activity.DetailsFoodActivity;
 
 /**
  * Created by Admin on 2/25/2018.
@@ -44,6 +47,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
                 .error(R.drawable.icon_error)
                 .into(holder.imgIcon);
 
+        onItemFoodClick(holder, position);
+
     }
 
     @Override
@@ -61,5 +66,17 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             txtName = itemView.findViewById(R.id.txt_foodname);
             imgIcon = itemView.findViewById(R.id.img_food);
         }
+    }
+
+    public void onItemFoodClick(ViewHolder holder, final int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, listFood.get(position).getName().toString(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, DetailsFoodActivity.class);
+                intent.putExtra("DETAIL_FOOD", listFood.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 }

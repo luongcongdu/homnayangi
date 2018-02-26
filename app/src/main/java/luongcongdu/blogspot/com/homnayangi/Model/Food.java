@@ -1,10 +1,12 @@
 package luongcongdu.blogspot.com.homnayangi.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Admin on 2/25/2018.
  */
 
-public class Food {
+public class Food implements Serializable {
     public int id;
     public String name;
     public String image;
@@ -12,9 +14,9 @@ public class Food {
     public String material;
     public String recipe;
     public int time;
-    public int idFood;
+    public int idFoodType;
 
-    public Food(int id, String name, String image, String descrip, String material, String recipe, int time, int idFood) {
+    public Food(int id, String name, String image, String descrip, String material, String recipe, int time, int idFoodType) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -22,7 +24,7 @@ public class Food {
         this.material = material;
         this.recipe = recipe;
         this.time = time;
-        this.idFood = idFood;
+        this.idFoodType = idFoodType;
     }
 
     public int getId() {
@@ -81,11 +83,11 @@ public class Food {
         this.time = time;
     }
 
-    public int getIdFood() {
-        return idFood;
+    public int getIdFoodType() {
+        return idFoodType;
     }
 
-    public void setIdFood(int idFood) {
-        this.idFood = idFood;
+    public void setIdFoodType(int idFoodType) {
+        this.idFoodType = idFoodType;
     }
 }
