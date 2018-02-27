@@ -12,14 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".View.activity.HomeActivity">
+
+        </activity>
+        <activity android:name=".View.activity.DetailsFoodActivity" />
+        <activity android:name=".View.activity.DetailArticleActivity" />
+        <activity android:name=".View.activity.ProfileActivity" />
+        <activity android:name=".View.activity.LoginActivity" />
+        <activity android:name=".View.activity.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.activity.DetailsFoodActivity" />
-        <activity android:name=".View.activity.DetailArticleActivity"></activity>
     </application>
 
 </manifest>

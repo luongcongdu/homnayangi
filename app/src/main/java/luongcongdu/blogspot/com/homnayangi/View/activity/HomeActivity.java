@@ -71,7 +71,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.this, "Profile", Toast.LENGTH_SHORT).show();
+                Intent iProfile = new Intent(HomeActivity.this, ProfileActivity.class);
+                startActivity(iProfile);
             }
         });
 
