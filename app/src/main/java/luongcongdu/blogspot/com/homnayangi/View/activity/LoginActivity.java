@@ -77,6 +77,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     progressDialog.show();
                     if (success) {
                         //dang nhap thanh cong!
+                        Intent i = new Intent();
+                        i.putExtra("SEND_BACK", "Đăng xuất");
+                        setResult(ProfileActivity.REQUEST_CODE, i);
+
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         SharedPreferences preferences = getSharedPreferences("dangnhap", MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
@@ -91,6 +95,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
                     } else {
                         progressDialog.dismiss();
+                        Intent i = new Intent();
+                        i.putExtra("SEND_BACK", "Đăng nhập");
+                        setResult(ProfileActivity.REQUEST_CODE, i);
                         Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không đúng !", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
