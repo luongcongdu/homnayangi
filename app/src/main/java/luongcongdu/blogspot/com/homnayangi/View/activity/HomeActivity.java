@@ -1,11 +1,13 @@
 package luongcongdu.blogspot.com.homnayangi.View.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +30,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ImageView imgHome, imgArticle, imgSearch, imgVideos;
     TextView txtToolbar;
     LinearLayout linearHome, linearArticle, linearSearch, linearVideo, linearAdd;
+    SharedPreferences preferences;
 
 
     @Override
@@ -61,6 +64,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         linearSearch.setOnClickListener(this);
         linearAdd.setOnClickListener(this);
         linearVideo.setOnClickListener(this);
+
+        preferences = getSharedPreferences("dangnhap", MODE_PRIVATE);
 
 
         //setup toolbar
@@ -206,7 +211,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 onVideoNavClick();
                 break;
             case R.id.linear_add:
-                Toast.makeText(this, "Add Recipe Activity", Toast.LENGTH_SHORT).show();
+                String stateLogin = preferences.getString("b", "");
+                Log.d("STATE", stateLogin);
+                if (stateLogin.equals("Đăng xuất")) {
+                    Intent intent = new Intent(HomeActivity.this, AddRecipeActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "Bạn chưa đăng nhập", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 break;
         }
     }

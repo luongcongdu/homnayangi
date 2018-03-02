@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="luongcongdu.blogspot.com.homnayangi.View.activity.AddRecipeActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tên món ăn"
+                    android:textColor="#637181"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="Nhập vào đây"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:singleLine="true"
+                    android:windowSoftInputMode="stateAlwaysHidden" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Chọn loại món ăn"
+                    android:textColor="#637181"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinner_foodtype"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"></Spinner>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#576472" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Miêu tả"
+                    android:textColor="#637181"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edt_descrip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="Nhập vào đây"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:singleLine="true"
+                    android:windowSoftInputMode="stateAlwaysHidden" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyên liệu"
+                    android:textColor="#637181"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edt_material"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="Nhập vào đây"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:singleLine="true"
+                    android:windowSoftInputMode="stateAlwaysHidden" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Công thức"
+                    android:textColor="#637181"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edt_recipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="Nhập vào đây"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:singleLine="true"
+                    android:windowSoftInputMode="stateAlwaysHidden" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Thời gian thực hiện(phút)"
+                    android:textColor="#637181"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edt_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="Nhập vào đây"
+                    android:inputType="number"
+                    android:maxLength="30"
+                    android:singleLine="true"
+                    android:windowSoftInputMode="stateAlwaysHidden" />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_gray_conor_button"
+                android:text="Hủy"
+                android:textAllCaps="false"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/btn_accept"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_blue_conor_button"
+                android:text="Đồng ý"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18dp" />
+
+        </TableRow>
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

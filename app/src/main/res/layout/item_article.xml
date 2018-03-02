@@ -7,39 +7,48 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_viewflipper_background"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="4dp">
 
         <ImageView
             android:id="@+id/img_article"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ct1" />
 
-        <TextView
-            android:id="@+id/txt_name_article"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Hôm nay ăn gì?"
-            android:textColor="#A6000000"
-            android:textSize="20sp" />
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txt_descrip_article"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:text="Đoạn text này để miêu tả"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/txt_name_article"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hôm nay ăn gì?"
+                android:textColor="#A6000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_descrip_article"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="Đoạn text này để miêu tả"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="4dp" />
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/text_default" />
 
 </LinearLayout>

@@ -12,10 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import luongcongdu.blogspot.com.homnayangi.R;
+import luongcongdu.blogspot.com.homnayangi.Utils.Contact;
+import luongcongdu.blogspot.com.homnayangi.View.Dialog.DialogInfo;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     TextView txtUsername, txtEmail, txtLogin;
-    LinearLayout linearLogin;
+    LinearLayout linearLogin, linearContact, linearInfo, linearManageRecipe;
     ImageView imgLogin;
 
     public static int REQUEST_CODE = 0;
@@ -35,6 +37,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         linearLogin = findViewById(R.id.linear_login);
         txtLogin = findViewById(R.id.txt_login);
         imgLogin = findViewById(R.id.icon_login);
+        linearContact = findViewById(R.id.linear_contact);
+        linearInfo = findViewById(R.id.linear_info);
+        linearManageRecipe = findViewById(R.id.linear_manage_recipe);
+
+        linearContact.setOnClickListener(this);
+        linearManageRecipe.setOnClickListener(this);
+        linearInfo.setOnClickListener(this);
         linearLogin.setOnClickListener(this);
 
         txtUsername.setText(preferences.getString("c", "Username"));
@@ -53,8 +62,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.linear_login:
+                finish();
                 Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
+                break;
+            case R.id.linear_contact:
+                Contact contact = new Contact(this);
+                contact.Contact("congdu.it@gmail.com", "Phản hồi từ người sử dụng ứng dụng Hôm Nay Ăn Gì?", "Nhập nội dung...");
+                break;
+            case R.id.linear_info:
+                DialogInfo dialogInfo = new DialogInfo(this);
+                dialogInfo.showDialog();
                 break;
         }
     }
