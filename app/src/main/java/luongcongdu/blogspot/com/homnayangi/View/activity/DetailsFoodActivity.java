@@ -3,6 +3,7 @@ package luongcongdu.blogspot.com.homnayangi.View.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -76,8 +77,8 @@ public class DetailsFoodActivity extends AppCompatActivity {
 
         title.setText(name);
         txtDescrip.setText(descrip);
-        txtMaterial.setText(material);
-        txtRecipe.setText(recipe);
+        txtMaterial.setText(Html.fromHtml(material));
+        txtRecipe.setText(Html.fromHtml(recipe));
         txtTime.setText(time + " phút");
         Picasso.with(this).load(food.getImage())
                 .placeholder(R.drawable.icon_loading)

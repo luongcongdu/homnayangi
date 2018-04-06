@@ -15,7 +15,7 @@ public class AddRecipeRequest extends StringRequest {
     private static final String url = Server.postRecipe;
     private Map<String, String> params;
 
-    public AddRecipeRequest(String name, String descrip, String material, String recipe, String time, String id_foodtype,
+    public AddRecipeRequest(String name, String descrip, String material, String recipe, String time, String id_foodtype, String user_id,
                             Response.Listener<String> listener) {
         super(Request.Method.POST, url, listener, null);
         params = new HashMap<>();
@@ -26,6 +26,7 @@ public class AddRecipeRequest extends StringRequest {
         params.put("recipe", recipe);
         params.put("time", time);
         params.put("id_foodtype", id_foodtype);
+        params.put("user_id", user_id);
 
     }
 

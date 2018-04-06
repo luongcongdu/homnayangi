@@ -1,7 +1,17 @@
 package luongcongdu.blogspot.com.homnayangi.View.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +19,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,11 +29,18 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import luongcongdu.blogspot.com.homnayangi.R;
 import luongcongdu.blogspot.com.homnayangi.Utils.AddRecipeRequest;
+import luongcongdu.blogspot.com.homnayangi.Utils.Server;
 
 public class AddRecipeActivity extends AppCompatActivity implements View.OnClickListener {
     EditText edtName, edtDescrip, edtMaterial, edtRecipe, edtTime;
@@ -31,6 +49,21 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     ProgressDialog progressDialog;
     Toolbar toolbar;
     TextView title;
+    ImageButton btnImage;
+    SharedPreferences preferences;
+    String user_id = "";
+
+    //Image request code
+    private int PICK_IMAGE_REQUEST = 1;
+
+    //storage permission code
+    private static final int STORAGE_PERMISSION_CODE = 123;
+
+    //Uri to store the image uri
+    private Uri filePath;
+
+    //Bitmap to get image from gallery
+    private Bitmap bitmap;
 
 
     @Override
@@ -38,6 +71,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
+        requestStoragePermission();
         initView();
         initSpinner();
     }
@@ -50,9 +84,14 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         edtTime = findViewById(R.id.edt_time);
         btnAccept = findViewById(R.id.btn_accept);
         btnCancel = findViewById(R.id.btn_cancel);
+        btnImage = findViewById(R.id.btn_image);
+        preferences = getSharedPreferences("dangnhap", MODE_PRIVATE);
+
+        user_id = preferences.getString("user_id", "1");
 
         btnCancel.setOnClickListener(this);
         btnAccept.setOnClickListener(this);
+        btnImage.setOnClickListener(this);
 
         toolbar = findViewById(R.id.toolbar);
         title = toolbar.findViewById(R.id.toolbar_title);
@@ -96,6 +135,34 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_cancel:
                 onBackPressed();
                 break;
+            case R.id.btn_image:
+                showFileChooser();
+                break;
+        }
+    }
+
+    //method to show file chooser
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    //handling the image chooser activity result
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                btnImage.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -137,33 +204,148 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             progressDialog.dismiss();
             Toast.makeText(AddRecipeActivity.this, "Bạn hãy nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
         } else {
-            final Response.Listener<String> listener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        boolean success = object.getBoolean("success");
-                        if (success == true) {
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            //old code
+//            final Response.Listener<String> listener = new Response.Listener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//                    try {
+//                        JSONObject object = new JSONObject(response);
+//                        boolean success = object.getBoolean("success");
+//                        if (success == true) {
+//                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+//                            Toast.makeText(getApplicationContext(), "Tải lên thành công !", Toast.LENGTH_SHORT).show();
+//                            startActivity(intent);
+//                            finish();
+//                        } else {
+//                            Toast.makeText(AddRecipeActivity.this, "Tải lên thất bại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+//                            finish();
+//                        }
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                }
+//            };
+//            AddRecipeRequest addRecipeRequest = new AddRecipeRequest(name, descrip, material, recipe, time, idFoodtype, user_id, listener);
+//            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+//            queue.add(addRecipeRequest);
+
+            //new code
+            //getting the actual path of the image
+            String path = getPath(filePath);
+
+            //Uploading code
+            try {
+                String uploadId = UUID.randomUUID().toString();
+
+                //Creating a multi part request
+                new MultipartUploadRequest(this, uploadId, Server.postRecipe)
+                        .addFileToUpload(path, "image") //Adding file
+                        .addParameter("name", name)
+                        .addParameter("descrip", descrip)
+                        .addParameter("material", material)
+                        .addParameter("recipe", recipe)
+                        .addParameter("time", time)
+                        .addParameter("id_foodtype", idFoodtype)
+                        .addParameter("user_id", user_id)
+                        .setNotificationConfig(new UploadNotificationConfig())
+                        .setMaxRetries(2)
+                        .startUpload(); //Starting the upload
+
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                             Toast.makeText(getApplicationContext(), "Tải lên thành công !", Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                             finish();
-                        } else {
-                            Toast.makeText(AddRecipeActivity.this, "Tải lên thất bại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
 
-                }
-            };
-            AddRecipeRequest addRecipeRequest = new AddRecipeRequest(name, descrip, material, recipe, time, idFoodtype, listener);
-            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            queue.add(addRecipeRequest);
+
+            } catch (Exception exc) {
+                Toast.makeText(this, "Tải lên thất bại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+
+
         }
 
+    }
+
+    /*
+   * This is the method responsible for image upload
+   * We need the full image path and the name for the image in this method
+   * */
+    public void uploadMultipart() {
+        //getting name for the image
+       // String name = editText.getText().toString().trim();
+
+        //getting the actual path of the image
+        String path = getPath(filePath);
+
+        //Uploading code
+        try {
+            String uploadId = UUID.randomUUID().toString();
+
+            //Creating a multi part request
+            new MultipartUploadRequest(this, uploadId, Server.UPLOAD_URL)
+                    .addFileToUpload(path, "image") //Adding file
+                    .setNotificationConfig(new UploadNotificationConfig())
+                    .setMaxRetries(2)
+                    .startUpload(); //Starting the upload
+
+        } catch (Exception exc) {
+            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //method to get the file path from uri
+    public String getPath(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+
+        cursor = getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+
+        return path;
+    }
+
+    //Requesting permission
+    private void requestStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            return;
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            //If the user has denied the permission previously your code will come to this block
+            //Here you can explain why you need this permission
+            //Explain here why you need this permission
+        }
+        //And finally ask for the permission
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+    }
+
+
+    //This method will be called when the user will tap on allow or deny
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        //Checking the request code of our request
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+
+            //If permission is granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //Displaying a toast
+                Toast.makeText(this, "Permission granted now you can read the storage", Toast.LENGTH_LONG).show();
+            } else {
+                //Displaying another toast if permission is not granted
+                Toast.makeText(this, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

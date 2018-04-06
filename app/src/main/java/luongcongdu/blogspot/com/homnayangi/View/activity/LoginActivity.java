@@ -84,8 +84,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         SharedPreferences preferences = getSharedPreferences("dangnhap", MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
+                        String user_id = object.getString("user_id");
                         String username = object.getString("username");
                         String email = object.getString("email");
+                        editor.putString("user_id",user_id);
+                        Log.d("USER_ID",user_id);
                         editor.putString("c", username);
                         editor.putString("b", "Đăng xuất");
                         editor.putString("d", email);
