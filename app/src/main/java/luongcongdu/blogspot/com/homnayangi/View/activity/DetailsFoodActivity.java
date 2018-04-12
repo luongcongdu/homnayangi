@@ -1,5 +1,7 @@
 package luongcongdu.blogspot.com.homnayangi.View.activity;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,12 +15,13 @@ import com.squareup.picasso.Picasso;
 import luongcongdu.blogspot.com.homnayangi.Model.Food;
 import luongcongdu.blogspot.com.homnayangi.R;
 
-public class DetailsFoodActivity extends AppCompatActivity {
+public class DetailsFoodActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView txtDescrip, txtMaterial, txtRecipe, txtTime;
     ImageView imgIcon;
     Toolbar toolbar;
     TextView title;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class DetailsFoodActivity extends AppCompatActivity {
     public void initView() {
         toolbar = findViewById(R.id.toolbar);
         title = toolbar.findViewById(R.id.toolbar_title);
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -87,4 +92,13 @@ public class DetailsFoodActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fab:
+                Intent intent = new Intent(DetailsFoodActivity.this, FBCommentActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }

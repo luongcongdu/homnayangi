@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="luongcongdu.blogspot.com.homnayangi.View.activity.VideoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/youtube_playerview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"></com.google.android.youtube.player.YouTubePlayerView>
+
+        <TextView
+            android:id="@+id/txtv_videotitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Video title"
+            android:textAllCaps="false"
+            android:textSize="18dp" />
+
+        <ListView
+            android:id="@+id/lv_videosub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ListView>
+    </LinearLayout>
+
+</LinearLayout>

@@ -24,7 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.activity.AddRecipeActivity"></activity>
+        <activity android:name=".View.activity.AddRecipeActivity" />
+        <activity android:name=".View.activity.FBCommentActivity" />
+        <activity android:name=".View.activity.VideoActivity" />
+        <activity android:name=".View.activity.TempVideoActivity"></activity>
     </application>
 
 </manifest>

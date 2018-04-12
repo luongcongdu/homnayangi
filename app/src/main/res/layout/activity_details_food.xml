@@ -92,6 +92,14 @@
                 android:text="Bước 1 Mở trước lò nướng ở 170 độ C (325 độ F). Đặt giá ở giữa lò nếu là lò nhỏ, hoặc 1 giá phía trên (còn chừa 1 nấc trên cùng), 1 giá phía dưới (còn chừa 1 nấc dưới cùng) nếu là lò lớn. Lót giấy chống dính vào khay. Trộn đều 300g bột mì, 1/2 muỗng cà phê muối, 1/2 muỗng cà phê muối nở (baking soda). Để sang 1 bên. Dùng máy đánh đều 170g bơ mềm và 2 loại đường cho đến khi chúng thật hòa quyện. Cho tình chất vani và trứng vào (chia làm 2 lần), khuấy thật đều. Chế hỗn hợp bột vào, trộn thật đều (dùng máy thì đánh ở tốc độ thấp nhất khoảng 20 giây). Dùng phới trộn chocolate chip vào hỗn hợp. Bánh quy chocolate giòn tan Bước 2 Cân khỏang 60g hỗn hợp bột, vo thành viên tròn. Hỗn hợp này sẽ cho ra khỏang 18 viên. Dùng đầu ngón tay kéo mỗi viên bột thành 2 phần bằng nhau. Xoay mỗi phần 90 độ và chụm 2 đầu tròn vào nhau, mặt nứt ở phía trên, cẩn thận đừng làm mượt phần phía trên. Đặt các viên bánh cách nhau 5cm trên khay. Bánh quy chocolate giòn tan Bước 3 Nướng cho đến khi bánh vàng đều, thành bánh cứng nhưng bên trong vẫn còn mềm xốp, khỏang 15-18 phút. Nếu lò lớn và nướng 2 khay 1 lúc thì ở giữa thời gian, bạn chuyển vị trí 2 khay cho nhau, cùng lúc xoay khay bánh 180 độ. Dùng dao dẹt nhấc bánh đã chín ra giá, để nguội. Giữ kín trong túi zip-lock, hoặc lọ (có thể nhét chung 1 mẩu bánh mì cho bánh được mềm và không bị ỉu)"
                 android:textSize="15sp" />
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_insert_comment_white_24dp" />
+
 
         </LinearLayout>
     </LinearLayout>
