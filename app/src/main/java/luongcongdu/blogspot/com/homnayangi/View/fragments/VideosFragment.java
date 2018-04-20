@@ -1,47 +1,49 @@
 package luongcongdu.blogspot.com.homnayangi.View.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import luongcongdu.blogspot.com.homnayangi.Adapter.PlaylistAdapter;
-import luongcongdu.blogspot.com.homnayangi.Model.CallAPIYoutubeSuccess;
-import luongcongdu.blogspot.com.homnayangi.Model.MessageYoutube.Item;
-import luongcongdu.blogspot.com.homnayangi.Model.ModelPlayListVideo;
-import luongcongdu.blogspot.com.homnayangi.Model.VideoInfo;
-import luongcongdu.blogspot.com.homnayangi.Model.YoutubeVideoView;
+import luongcongdu.blogspot.com.homnayangi.Adapter.VideoYoutubeAdapter;
+import luongcongdu.blogspot.com.homnayangi.Model.VideoYoutube;
 import luongcongdu.blogspot.com.homnayangi.R;
-import luongcongdu.blogspot.com.homnayangi.Utils.CallYoutubeAPI;
-import luongcongdu.blogspot.com.homnayangi.Utils.SharedPrefsUtils;
+import luongcongdu.blogspot.com.homnayangi.View.activity.PlayVideoActivity;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VideosFragment extends Fragment  implements YoutubeVideoView.Callback, YouTubePlayer.PlaybackEventListener{
+public class VideosFragment extends Fragment {
     View view;
-    ArrayList<ModelPlayListVideo> playlistlist;
-    ArrayList<VideoInfo> infoArrayList;
-    PlaylistAdapter playlistAdapter;
-    ListView listplayid;
-    public static ListView listViewsub;
-    public static YoutubeVideoView mYouTubeVideoView;
-    public static TextView txtvvideotitle;
-    CallYoutubeAPI callAPI;
+    String URL_API_YOUTUBE = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLxcNdLGGW7F-GqTUZTDd2em5jA26H4pAp&key=AIzaSyDLlL4NkmR5Fb0-LJiB792iH8I_mo7mKeo&maxResults=50";
+    ListView lvVideo;
+    ArrayList<VideoYoutube> arrayVideo;
+    VideoYoutubeAdapter adapter;
 
     public VideosFragment() {
         // Required empty public constructor
@@ -60,123 +62,66 @@ public class VideosFragment extends Fragment  implements YoutubeVideoView.Callba
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_videos, container, false);
 
-        init();
-        GetJsonYoutube();
-        YouTubePlayerFragment youtubeFragment = (YouTubePlayerFragment) getActivity().getFragmentManager().findFragmentById(R.id.youtubeFragment);
-        youtubeFragment.initialize("YOUR API KEY",
-                new YouTubePlayer.OnInitializedListener() {
-                    @Override
-                    public void onInitializationSuccess(YouTubePlayer.Provider provider,
-                                                        YouTubePlayer youTubePlayer, boolean b) {
-                        // do any work here to cue video, play video, etc.
-                        youTubePlayer.cueVideo(PlaylistAdapter.videoid);
-                        youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    }
+        lvVideo = view.findViewById(R.id.lv_video);
+        arrayVideo = new ArrayList<>();
+        adapter = new VideoYoutubeAdapter(getActivity(), R.layout.row_video_youtube, arrayVideo);
+        lvVideo.setAdapter(adapter);
 
-                    @Override
-                    public void onInitializationFailure(YouTubePlayer.Provider provider,
-                                                        YouTubeInitializationResult youTubeInitializationResult) {
-
-                    }
-                });
-        mYouTubeVideoView = view.findViewById(R.id.youtube_view);
-        mYouTubeVideoView.setCallback(this);
-
-
-
+        GetJsonYoutube(URL_API_YOUTUBE);
+        lvVideo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+                intent.putExtra("ID_VIDEO",arrayVideo.get(i).getVideoId());
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
-    private void GetJsonYoutube() {
-        playlistlist = new ArrayList<>();
-        callAPI.Get_Video(getActivity());
-        int i;
-        //Toast.makeText(this, SharedPrefsUtils.getStringPreference(getApplicationContext(),"listplaylistidsize"), Toast.LENGTH_SHORT).show();
-        for (i = 0; i < Integer.parseInt(SharedPrefsUtils.getStringPreference(getActivity(), "listplaylistidsize")); i++) {
-            final int finalI = i;
-            callAPI.Get_ListVideo(getActivity(), SharedPrefsUtils.getStringPreference(getActivity(), "playlistid" + i), new CallAPIYoutubeSuccess() {
-                @Override
-                public void OnSuccess(List<luongcongdu.blogspot.com.homnayangi.Model.MessageListVideo.Item> videoinfos) {
-                    infoArrayList = new ArrayList<>();
-                    for (int j = 0; j < videoinfos.size(); j++) {
-                        String title, chaneltitle, playlistid, imgvideo, videoid;
-                        Log.d("titlevideo", videoinfos.get(j).getSnippet().getTitle());
-                        title = videoinfos.get(j).getSnippet().getTitle();
-                        chaneltitle = videoinfos.get(j).getSnippet().getChannelTitle();
-                        playlistid = videoinfos.get(j).getSnippet().getPlaylistId();
-                        videoid = videoinfos.get(j).getSnippet().getResourceId().getVideoId();
-                        imgvideo = videoinfos.get(j).getSnippet().getThumbnails().getMedium().getUrl();
-                        infoArrayList.add(new VideoInfo(title, chaneltitle, playlistid, videoid, imgvideo));
-                        Log.d("kkkk", String.valueOf(infoArrayList.size()));
+    private void GetJsonYoutube(final String url) {
+        final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("items");
+                            String title="";
+                            String urlImage="";
+                            String videoID="";
+
+                            for (int i=0; i <jsonArray.length(); i++){
+                                JSONObject object = jsonArray.getJSONObject(i);
+
+                                JSONObject jsonSpippet = object.getJSONObject("snippet");
+                                title = jsonSpippet.getString("title");
+                                Log.d("TITLE",title);
+                                JSONObject jsonThumbnail  = jsonSpippet.getJSONObject("thumbnails");
+                                JSONObject jsonMedium = jsonThumbnail.getJSONObject("medium");
+                                urlImage = jsonMedium.getString("url");
+                                Log.d("URLIMAGE",urlImage);
+                                JSONObject jsonResource = jsonSpippet.getJSONObject("resourceId");
+                                videoID = jsonResource.getString("videoId");
+                                Log.d("VIDEOID",videoID);
+
+                                arrayVideo.add(new VideoYoutube(title, urlImage, videoID));
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    playlistlist.add(new ModelPlayListVideo(SharedPrefsUtils.getStringPreference(getActivity(), "playlisttitle" + finalI), infoArrayList));
-                    playlistAdapter = new PlaylistAdapter(getActivity(), playlistlist);
-                    listplayid.setAdapter(playlistAdapter);
-                }
-            });
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Lỗi", Toast.LENGTH_SHORT).show();
+            }
         }
-        setListViewHeightBasedOnChildren(listplayid);
+        );
+
+        requestQueue.add(jsonObjectRequest);
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-
-        int totalHeight = 0;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += (listItem.getMeasuredHeight() + 17);
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-
-    }
-
-    private void init() {
-        listplayid =  view.findViewById(R.id.lv_playlist);
-        listViewsub =  view.findViewById(R.id.lv_videosub1);
-        mYouTubeVideoView = view.findViewById(R.id.youtube_view);
-        txtvvideotitle =  view.findViewById(R.id.txtv_videotitle1);
-    }
-
-    @Override
-    public void onPlaying() {
-        mYouTubeVideoView.show();
-    }
-
-    @Override
-    public void onPaused() {
-        mYouTubeVideoView.show();
-    }
-
-    @Override
-    public void onStopped() {
-        mYouTubeVideoView.show();
-    }
-
-    @Override
-    public void onBuffering(boolean b) {
-
-    }
-
-    @Override
-    public void onSeekTo(int i) {
-
-    }
-
-    @Override
-    public void onVideoViewHide() {
-
-    }
-
-    @Override
-    public void onVideoClick() {
-
-    }
 }

@@ -10,68 +10,69 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import luongcongdu.blogspot.com.homnayangi.Model.VideoInfo;
+import luongcongdu.blogspot.com.homnayangi.Model.VideoYoutube;
 import luongcongdu.blogspot.com.homnayangi.R;
 
 /**
- * Created by Admin on 4/12/2018.
+ * Created by Admin on 4/18/2018.
  */
 
 public class VideoYoutubeAdapter extends BaseAdapter {
     private Context context;
-    ArrayList<VideoInfo> videoInfoArrayList = new ArrayList<>();
+    private int layout;
+    private List<VideoYoutube> videoYoutubeList;
 
-    public VideoYoutubeAdapter(Context context, ArrayList<VideoInfo> videoInfoArrayList) {
+    public VideoYoutubeAdapter(Context context, int layout, List<VideoYoutube> videoYoutubeList) {
         this.context = context;
-        this.videoInfoArrayList = videoInfoArrayList;
+        this.layout = layout;
+        this.videoYoutubeList = videoYoutubeList;
     }
 
     @Override
     public int getCount() {
-        return videoInfoArrayList.size();
+        return videoYoutubeList.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return videoInfoArrayList.get(position);
+    public Object getItem(int i) {
+        return videoYoutubeList.get(i);
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public long getItemId(int i) {
+        return 0;
     }
 
-    public class ViewHolder{
-        public TextView txtvtitle,txtchaneltitle;
-        public ImageView imgvideo;
+    private class ViewHolder {
+        ImageView imgThumbnail;
+        TextView txtTitle;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        if(convertView == null){
+    public View getView(int i, View view, ViewGroup viewGroup) {
+
+        ViewHolder viewHolder;
+        if (view == null) {
             viewHolder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.row_list_video,null);
-            viewHolder.txtvtitle = convertView.findViewById(R.id.txtv_title);
-            viewHolder.txtchaneltitle = convertView.findViewById(R.id.txtv_chaneltitle);
-            viewHolder.imgvideo = convertView.findViewById(R.id.img_video);
-            convertView.setTag(viewHolder);
-        }
-        else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(layout, null);
+            viewHolder.txtTitle = view.findViewById(R.id.txtTitleVideo);
+            viewHolder.imgThumbnail = view.findViewById(R.id.imgThumbnailVideo);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
         }
 
-        VideoInfo videoInfo = (VideoInfo) getItem(position);
-        viewHolder.txtvtitle.setText(videoInfo.getTitle());
-        viewHolder.txtchaneltitle.setText(videoInfo.getChaneltitle());
-        Picasso.with(context).load(videoInfo.getUrlpicture())
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.error)
-                .into(viewHolder.imgvideo);
+        VideoYoutube videoYoutube = videoYoutubeList.get(i);
+        viewHolder.txtTitle.setText(videoYoutube.getTitle());
+        Picasso.with(context).load(videoYoutube.getThumbnail())
+                .placeholder(R.drawable.icon_loading)
+                .error(R.drawable.icon_error)
+                .into(viewHolder.imgThumbnail);
 
-        return convertView;
+
+        return view;
     }
 }

@@ -52,6 +52,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     ImageButton btnImage;
     SharedPreferences preferences;
     String user_id = "";
+    String user_name="";
 
     //Image request code
     private int PICK_IMAGE_REQUEST = 1;
@@ -88,6 +89,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         preferences = getSharedPreferences("dangnhap", MODE_PRIVATE);
 
         user_id = preferences.getString("user_id", "1");
+        user_name = preferences.getString("c", "admin");
 
         btnCancel.setOnClickListener(this);
         btnAccept.setOnClickListener(this);
@@ -250,6 +252,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                         .addParameter("time", time)
                         .addParameter("id_foodtype", idFoodtype)
                         .addParameter("user_id", user_id)
+                        .addParameter("username", user_name)
                         .setNotificationConfig(new UploadNotificationConfig())
                         .setMaxRetries(2)
                         .startUpload(); //Starting the upload

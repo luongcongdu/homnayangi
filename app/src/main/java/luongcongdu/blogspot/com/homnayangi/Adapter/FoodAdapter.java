@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import luongcongdu.blogspot.com.homnayangi.Model.Food;
 import luongcongdu.blogspot.com.homnayangi.R;
@@ -78,5 +79,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
+    }
+
+    public void filterList(List<Food> foodList) {
+        listFood = new ArrayList<>();
+        listFood.addAll(foodList);
+        notifyDataSetChanged();
     }
 }

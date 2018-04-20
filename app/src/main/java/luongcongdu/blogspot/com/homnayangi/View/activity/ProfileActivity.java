@@ -74,6 +74,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 DialogInfo dialogInfo = new DialogInfo(this);
                 dialogInfo.showDialog();
                 break;
+            case R.id.linear_manage_recipe:
+                Intent iManage = new Intent(ProfileActivity.this, ManageRecipeActivity.class);
+                startActivity(iManage);
+                break;
         }
     }
 

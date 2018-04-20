@@ -15,8 +15,10 @@ public class Food implements Serializable {
     public String recipe;
     public int time;
     public int idFoodType;
+    public int user_id;
+    public String username;
 
-    public Food(int id, String name, String image, String descrip, String material, String recipe, int time, int idFoodType) {
+    public Food(int id, String name, String image, String descrip, String material, String recipe, int time, int idFoodType, int user_id, String username) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -25,6 +27,8 @@ public class Food implements Serializable {
         this.recipe = recipe;
         this.time = time;
         this.idFoodType = idFoodType;
+        this.user_id = user_id;
+        this.username = username;
     }
 
     public int getId() {
@@ -89,5 +93,21 @@ public class Food implements Serializable {
 
     public void setIdFoodType(int idFoodType) {
         this.idFoodType = idFoodType;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

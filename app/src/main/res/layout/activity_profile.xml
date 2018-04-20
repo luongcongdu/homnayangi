@@ -34,7 +34,7 @@
             android:elevation="5dp"
             android:padding="20dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/icon_avatar" />
+            android:src="@drawable/icon_chef" />
 
         <RelativeLayout
             android:id="@+id/profile_layout"
@@ -45,18 +45,6 @@
             android:elevation="4dp"
             android:paddingBottom="24dp">
 
-
-            <ImageView
-                android:id="@+id/img_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:clickable="true"
-
-                android:src="@android:drawable/ic_menu_edit" />
 
             <TextView
                 android:id="@+id/txt_username"

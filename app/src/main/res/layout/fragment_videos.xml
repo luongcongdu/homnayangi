@@ -1,62 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="luongcongdu.blogspot.com.homnayangi.View.fragments.VideosFragment">
 
-
     <ListView
-        android:id="@+id/lv_playlist"
+        android:id="@+id/lv_video"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
-    <luongcongdu.blogspot.com.homnayangi.Model.YoutubeVideoView
-        android:background="@android:color/background_light"
-        android:visibility="invisible"
-        android:id="@+id/youtube_view"
-        android:layout_gravity="end"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="V"
-                android:textColor="#000"
-                android:textSize="20dp" />
-            <fragment
-                android:id="@+id/youtubeFragment"
-                android:name="com.google.android.youtube.player.YouTubePlayerFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></fragment>
-        </LinearLayout>
-        <!--</TextureView>-->
+        android:layout_height="match_parent" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/txtv_videotitle1"
-                    android:text="Video title"
-                    android:textSize="18dp"
-                    android:textAllCaps="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <ListView
-                    android:id="@+id/lv_videosub1"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"></ListView>
-            </LinearLayout>
-        </ScrollView>
-
-    </luongcongdu.blogspot.com.homnayangi.Model.YoutubeVideoView>
-
-</FrameLayout>
+</LinearLayout>

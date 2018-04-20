@@ -11,6 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/YOUTUBE_API_KEY" />
+
         <activity android:name=".View.activity.HomeActivity" />
         <activity android:name=".View.activity.DetailsFoodActivity" />
         <activity android:name=".View.activity.DetailArticleActivity" />
@@ -26,8 +30,8 @@
         </activity>
         <activity android:name=".View.activity.AddRecipeActivity" />
         <activity android:name=".View.activity.FBCommentActivity" />
-        <activity android:name=".View.activity.VideoActivity" />
-        <activity android:name=".View.activity.TempVideoActivity"></activity>
+        <activity android:name=".View.activity.PlayVideoActivity" />
+        <activity android:name=".View.activity.ManageRecipeActivity"></activity>
     </application>
 
 </manifest>

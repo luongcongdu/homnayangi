@@ -101,6 +101,8 @@ public class HomeFragment extends Fragment {
                     String descrip = "";
                     String material = "";
                     String recipe = "";
+                    int userID = 0;
+                    String username = "";
                     int time = 0;
                     int idFoodType = 0;
 
@@ -115,7 +117,9 @@ public class HomeFragment extends Fragment {
                             recipe = jsonObject.getString("recipe");
                             time = jsonObject.getInt("time");
                             idFoodType = jsonObject.getInt("idfoodtype");
-                            listFood.add(new Food(id, name, image, descrip, material, recipe, time, idFoodType));
+                            userID = jsonObject.getInt("user_id");
+                            username = jsonObject.getString("username");
+                            listFood.add(new Food(id, name, image, descrip, material, recipe, time, idFoodType, userID, username));
                             foodAdapter.notifyDataSetChanged();
 
                         } catch (JSONException e) {
