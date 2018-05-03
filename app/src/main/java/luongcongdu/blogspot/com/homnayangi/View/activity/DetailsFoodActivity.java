@@ -164,6 +164,8 @@ public class DetailsFoodActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void getComment() {
+        Food food = (Food) getIntent().getSerializableExtra("DETAIL_FOOD");
+        final String idFood = String.valueOf(food.getId());
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.getComment, new Response.Listener<JSONArray>() {
             @Override
@@ -183,8 +185,10 @@ public class DetailsFoodActivity extends AppCompatActivity implements View.OnCli
                             foodID = jsonObject.getString("food_id");
                             content = jsonObject.getString("content");
 
-                            listComment.add(new Comment(userName, content));
-                            adapter.notifyDataSetChanged();
+                            if (foodID.equals(idFood)) {
+                                listComment.add(new Comment(userName, content));
+                                adapter.notifyDataSetChanged();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

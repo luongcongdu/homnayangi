@@ -2,12 +2,20 @@ package luongcongdu.blogspot.com.homnayangi.View.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +26,8 @@ import java.util.ArrayList;
 
 import luongcongdu.blogspot.com.homnayangi.Adapter.HomeAdapter;
 import luongcongdu.blogspot.com.homnayangi.R;
+import luongcongdu.blogspot.com.homnayangi.Utils.Contact;
+import luongcongdu.blogspot.com.homnayangi.View.Dialog.DialogInfo;
 import luongcongdu.blogspot.com.homnayangi.View.fragments.ArticleFragment;
 import luongcongdu.blogspot.com.homnayangi.View.fragments.HomeFragment;
 import luongcongdu.blogspot.com.homnayangi.View.fragments.SearchFragment;
@@ -28,9 +38,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ViewPager viewPager;
     TextView txtHome, txtArticle, txtSearch, txtVideos;
     ImageView imgHome, imgArticle, imgSearch, imgVideos;
-    TextView txtToolbar;
+    TextView txtToolbar, txtUsername, txtEmail;
     LinearLayout linearHome, linearArticle, linearSearch, linearVideo, linearAdd;
     SharedPreferences preferences;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
 
     @Override
@@ -59,6 +71,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         linearAdd = findViewById(R.id.linear_add);
         linearSearch = findViewById(R.id.linear_search);
         linearVideo = findViewById(R.id.linear_videos);
+        drawerLayout = findViewById(R.id.drawer);
+        navigationView = findViewById(R.id.navigationview);
         linearHome.setOnClickListener(this);
         linearArticle.setOnClickListener(this);
         linearSearch.setOnClickListener(this);
@@ -67,6 +81,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         preferences = getSharedPreferences("dangnhap", MODE_PRIVATE);
 
+        View headerView = navigationView.getHeaderView(0);
+        txtUsername = headerView.findViewById(R.id.nav_header_username);
+        txtEmail = headerView.findViewById(R.id.nav_header_email);
+        txtUsername.setText(preferences.getString("c", "Username"));
+        txtEmail.setText(preferences.getString("d", "Email"));
+
+        Menu menu = navigationView.getMenu();
+        MenuItem item = menu.findItem(R.id.nav_item_four);
+        String stateLogin = preferences.getString("b", "");
+        Log.d("STATE", stateLogin);
+        if (stateLogin.equals("Đăng xuất")) {
+            item.setTitle(stateLogin);
+        }
 
         //setup toolbar
         final Toolbar toolbar = findViewById(R.id.toolbar_home);
@@ -76,12 +103,45 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iProfile = new Intent(HomeActivity.this, ProfileActivity.class);
-                startActivity(iProfile);
+                drawerLayout.openDrawer(Gravity.START);
             }
         });
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         setupBottomNav();
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_item_one:
+                        String stateLogin = preferences.getString("b", "");
+                        Log.d("STATE", stateLogin);
+                        if (stateLogin.equals("Đăng xuất")) {
+                            Intent iManage = new Intent(HomeActivity.this, ManageRecipeActivity.class);
+                            startActivity(iManage);
+                        } else {
+                            Toast.makeText(HomeActivity.this, "Bạn chưa đăng nhập", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        break;
+                    case R.id.nav_item_two:
+                        Contact contact = new Contact(HomeActivity.this);
+                        contact.Contact("congdu.it@gmail.com", "Phản hồi từ người sử dụng ứng dụng Hôm Nay Ăn Gì?", "Nhập nội dung...");
+                        break;
+                    case R.id.nav_item_three:
+                        DialogInfo dialogInfo = new DialogInfo(HomeActivity.this);
+                        dialogInfo.showDialog();
+                        break;
+                    case R.id.nav_item_four:
+                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     public void initFragments() {
@@ -142,6 +202,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
 
     private void onHomeNavClick() {
         imgHome.setImageResource(R.drawable.icon_home_focus);
@@ -223,4 +284,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+
 }

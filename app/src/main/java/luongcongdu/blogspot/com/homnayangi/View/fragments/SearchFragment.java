@@ -29,6 +29,7 @@ import luongcongdu.blogspot.com.homnayangi.Adapter.FoodAdapter;
 import luongcongdu.blogspot.com.homnayangi.Model.Food;
 import luongcongdu.blogspot.com.homnayangi.R;
 import luongcongdu.blogspot.com.homnayangi.Utils.Server;
+import luongcongdu.blogspot.com.homnayangi.Utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +60,7 @@ public class SearchFragment extends Fragment {
         searchView = view.findViewById(R.id.search_view);
 
         listFood = new ArrayList<>();
-        foodAdapter = new FoodAdapter(getActivity(), listFood);
+        foodAdapter = new FoodAdapter(getActivity(), listFood, Utils.RECIPE);
         recyclerSearch.setHasFixedSize(true);
         recyclerSearch.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerSearch.setAdapter(foodAdapter);

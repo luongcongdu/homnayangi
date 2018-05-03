@@ -33,6 +33,7 @@ import luongcongdu.blogspot.com.homnayangi.Adapter.FoodAdapter;
 import luongcongdu.blogspot.com.homnayangi.Model.Food;
 import luongcongdu.blogspot.com.homnayangi.R;
 import luongcongdu.blogspot.com.homnayangi.Utils.Server;
+import luongcongdu.blogspot.com.homnayangi.Utils.Utils;
 import luongcongdu.blogspot.com.homnayangi.View.activity.DetailsFoodActivity;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -76,7 +77,7 @@ public class HomeFragment extends Fragment {
 //        viewFlipper.setOutAnimation(slide_out);
 
         listFood = new ArrayList<>();
-        foodAdapter = new FoodAdapter(getActivity(), listFood);
+        foodAdapter = new FoodAdapter(getActivity(), listFood, Utils.RECIPE);
         recyclerHome.setHasFixedSize(true);
         recyclerHome.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerHome.setAdapter(foodAdapter);

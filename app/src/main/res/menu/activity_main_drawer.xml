@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_item_one"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="Quản lý công thức" />
+        <item
+            android:id="@+id/nav_item_two"
+            android:icon="@android:drawable/ic_menu_call"
+            android:title="Liên hệ" />
+        <item
+            android:id="@+id/nav_item_three"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Thông tin" />
+        <item
+            android:id="@+id/nav_item_four"
+            android:icon="@android:drawable/ic_partial_secure"
+            android:title="Đăng nhập" />
+    </group>
+
+</menu>

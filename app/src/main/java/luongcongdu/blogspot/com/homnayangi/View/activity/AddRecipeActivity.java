@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,7 +53,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     ImageButton btnImage;
     SharedPreferences preferences;
     String user_id = "";
-    String user_name="";
+    String user_name = "";
+    Intent intent;
+    String handleType = "";
 
     //Image request code
     private int PICK_IMAGE_REQUEST = 1;
@@ -78,11 +81,30 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void initView() {
+        intent = getIntent();
+        handleType = intent.getStringExtra("HANDLE_TYPE");
+        Log.d("HANDLE_TYPE", handleType);
+
+
         edtName = findViewById(R.id.edt_name);
         edtDescrip = findViewById(R.id.edt_descrip);
         edtMaterial = findViewById(R.id.edt_material);
         edtRecipe = findViewById(R.id.edt_recipe);
         edtTime = findViewById(R.id.edt_time);
+        toolbar = findViewById(R.id.toolbar);
+        title = toolbar.findViewById(R.id.toolbar_title);
+
+        if (handleType.equals("EDIT")) {
+            edtName.setText(intent.getStringExtra("NAME"));
+            edtDescrip.setText(intent.getStringExtra("DESCRIP"));
+            edtMaterial.setText(intent.getStringExtra("MATERIAL"));
+            edtRecipe.setText(intent.getStringExtra("RECIPE"));
+            edtTime.setText(intent.getStringExtra("TIME"));
+            title.setText("Sửa công thức");
+        }
+
+        title.setText("Thêm công thức");
+
         btnAccept = findViewById(R.id.btn_accept);
         btnCancel = findViewById(R.id.btn_cancel);
         btnImage = findViewById(R.id.btn_image);
@@ -91,13 +113,13 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         user_id = preferences.getString("user_id", "1");
         user_name = preferences.getString("c", "admin");
 
+        Log.d("USER_ID", user_id);
+        Log.d("USERNAME", user_name);
+
         btnCancel.setOnClickListener(this);
         btnAccept.setOnClickListener(this);
         btnImage.setOnClickListener(this);
 
-        toolbar = findViewById(R.id.toolbar);
-        title = toolbar.findViewById(R.id.toolbar_title);
-        title.setText("Thêm công thức");
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -132,6 +154,10 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_accept:
+                if (handleType.equals("EDIT")) {
+                    Log.d("HANDLE_TYPE", handleType);
+                    handleEdit();
+                }
                 handleAdd();
                 break;
             case R.id.btn_cancel:
@@ -176,6 +202,8 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         String recipe = edtRecipe.getText().toString();
         String time = edtTime.getText().toString();
         String idFoodtype = "";
+
+        Log.d("name", name);
 
         String temp = spinner.getSelectedItem().toString();
         if (temp.equals("Ăn sáng")) {
@@ -254,15 +282,15 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                         .addParameter("user_id", user_id)
                         .addParameter("username", user_name)
                         .setNotificationConfig(new UploadNotificationConfig())
-                        .setMaxRetries(2)
+                        .setMaxRetries(2).setUtf8Charset()
                         .startUpload(); //Starting the upload
 
+                Log.d("UPLOAD", "UPLOAD");
+
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            Toast.makeText(getApplicationContext(), "Tải lên thành công !", Toast.LENGTH_SHORT).show();
-                            startActivity(intent);
-                            finish();
-
-
+                Toast.makeText(getApplicationContext(), "Tải lên thành công !", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+                finish();
 
             } catch (Exception exc) {
                 Toast.makeText(this, "Tải lên thất bại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
@@ -274,13 +302,90 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    public void handleEdit() {
+        String idFood = intent.getStringExtra("ID");
+        String name = edtName.getText().toString();
+        String descrip = edtDescrip.getText().toString();
+        String material = edtMaterial.getText().toString();
+        String recipe = edtRecipe.getText().toString();
+        String time = edtTime.getText().toString();
+        String idFoodtype = "";
+
+        Log.d("name", name);
+
+        String temp = spinner.getSelectedItem().toString();
+        if (temp.equals("Ăn sáng")) {
+            idFoodtype = "1";
+        } else if (temp.equals("Món chay")) {
+            idFoodtype = "2";
+        } else if (temp.equals("Món chính")) {
+            idFoodtype = "3";
+        } else if (temp.equals("Bánh")) {
+            idFoodtype = "4";
+        } else if (temp.equals("Thức uống")) {
+            idFoodtype = "5";
+        } else if (temp.equals("Nước chấm")) {
+            idFoodtype = "6";
+        } else if (temp.equals("Bún - Mì - Phở")) {
+            idFoodtype = "7";
+        }
+
+        progressDialog = new ProgressDialog(AddRecipeActivity.this);
+        progressDialog.setTitle("Đang tải lên");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        if (name.equals("") || descrip.equals("") || material.equals("") || recipe.equals("")
+                || time.equals("")) {
+            progressDialog.dismiss();
+            Toast.makeText(AddRecipeActivity.this, "Bạn hãy nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        } else {
+            //getting the actual path of the image
+            String path = getPath(filePath);
+
+            //Uploading code
+            try {
+                String uploadId = UUID.randomUUID().toString();
+
+                //Creating a multi part request
+                new MultipartUploadRequest(this, uploadId, Server.editRecipe)
+                        .addFileToUpload(path, "image") //Adding file
+                        .addParameter("Id", idFood)
+                        .addParameter("name", name)
+                        .addParameter("descrip", descrip)
+                        .addParameter("material", material)
+                        .addParameter("recipe", recipe)
+                        .addParameter("time", time)
+                        .addParameter("id_foodtype", idFoodtype)
+                        .addParameter("user_id", user_id)
+                        .addParameter("username", user_name)
+                        .setNotificationConfig(new UploadNotificationConfig())
+                        .setMaxRetries(2).setUtf8Charset()
+                        .startUpload(); //Starting the upload
+
+                Log.d("UPLOAD", "UPLOAD");
+
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                Toast.makeText(getApplicationContext(), "Cập nhật thành công !", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+                finish();
+
+            } catch (Exception exc) {
+                Toast.makeText(this, "Tải lên thất bại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        }
+    }
+
     /*
    * This is the method responsible for image upload
    * We need the full image path and the name for the image in this method
    * */
     public void uploadMultipart() {
         //getting name for the image
-       // String name = editText.getText().toString().trim();
+        // String name = editText.getText().toString().trim();
 
         //getting the actual path of the image
         String path = getPath(filePath);

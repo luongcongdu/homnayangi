@@ -24,6 +24,7 @@ import luongcongdu.blogspot.com.homnayangi.Model.Food;
 import luongcongdu.blogspot.com.homnayangi.R;
 import luongcongdu.blogspot.com.homnayangi.Utils.GetFoodForUserRequest;
 import luongcongdu.blogspot.com.homnayangi.Utils.Server;
+import luongcongdu.blogspot.com.homnayangi.Utils.Utils;
 
 public class ManageRecipeActivity extends AppCompatActivity {
 
@@ -42,7 +43,7 @@ public class ManageRecipeActivity extends AppCompatActivity {
         user_id = preferences.getString("user_id", "1");
         recyclerManageRecipe = findViewById(R.id.recycler_manage_recipe);
         listFood = new ArrayList<>();
-        foodAdapter = new FoodAdapter(this, listFood);
+        foodAdapter = new FoodAdapter(this, listFood, Utils.MANAGE_RECIPE);
         recyclerManageRecipe.setHasFixedSize(true);
         recyclerManageRecipe.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerManageRecipe.setAdapter(foodAdapter);
