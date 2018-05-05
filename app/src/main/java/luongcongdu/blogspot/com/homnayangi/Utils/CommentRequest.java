@@ -14,12 +14,13 @@ public class CommentRequest extends StringRequest {
     private static final String url = Server.postComment;
     private Map<String, String> params;
 
-    public CommentRequest(String user_id, String food_id, String content, Response.Listener<String> listener) {
+    public CommentRequest(String user_id, String food_id, String content, String username, Response.Listener<String> listener) {
         super(Method.POST, url, listener, null);
         params = new HashMap<>();
         params.put("user_id", user_id);
         params.put("food_id", food_id);
         params.put("content", content);
+        params.put("username", username);
     }
 
     @Override

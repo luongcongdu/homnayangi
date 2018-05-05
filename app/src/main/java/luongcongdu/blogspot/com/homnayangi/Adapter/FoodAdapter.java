@@ -118,6 +118,20 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
                             intent.putExtra("ID_FOODTYPE", String.valueOf(listFood.get(position).getIdFoodType()));
                             intent.putExtra("USER_ID", String.valueOf(listFood.get(position).getUser_id()));
                             intent.putExtra("USERNAME", listFood.get(position).getUsername());
+
+                            //
+                            DeleteRecipeRequest deleteRecipeRequest = new DeleteRecipeRequest(String.valueOf(listFood.get(position).getId()),
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            listFood.remove(position);
+                                            notifyDataSetChanged();
+                                        }
+                                    });
+                            RequestQueue queue = Volley.newRequestQueue(context);
+                            queue.add(deleteRecipeRequest);
+
+
                             context.startActivity(intent);
 
                         } else if (which == 1) {

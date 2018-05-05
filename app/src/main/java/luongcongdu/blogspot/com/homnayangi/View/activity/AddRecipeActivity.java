@@ -82,9 +82,10 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
 
     public void initView() {
         intent = getIntent();
-        handleType = intent.getStringExtra("HANDLE_TYPE");
-        Log.d("HANDLE_TYPE", handleType);
-
+        if (intent.getStringExtra("HANDLE_TYPE") != null){
+            handleType = intent.getStringExtra("HANDLE_TYPE");
+            Log.d("HANDLE_TYPE", handleType);
+        }
 
         edtName = findViewById(R.id.edt_name);
         edtDescrip = findViewById(R.id.edt_descrip);
@@ -102,8 +103,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             edtTime.setText(intent.getStringExtra("TIME"));
             title.setText("Sửa công thức");
         }
-
-        title.setText("Thêm công thức");
+        else {
+            title.setText("Thêm công thức");
+        }
 
         btnAccept = findViewById(R.id.btn_accept);
         btnCancel = findViewById(R.id.btn_cancel);
@@ -369,6 +371,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
 
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 Toast.makeText(getApplicationContext(), "Cập nhật thành công !", Toast.LENGTH_SHORT).show();
+
+
+
                 startActivity(intent);
                 finish();
 

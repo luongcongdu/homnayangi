@@ -134,33 +134,41 @@ public class DetailsFoodActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void handleComment() {
-        Food food = (Food) getIntent().getSerializableExtra("DETAIL_FOOD");
-        String userID = preferences.getString("user_id", "1");
-        String userName = preferences.getString("c", "Username");
-        String foodID = String.valueOf(food.getId());
-        String content = edtComment.getText().toString().trim();
+        String stateLogin = preferences.getString("b", "");
+        Log.d("STATE", stateLogin);
 
-        if (content.equals("")) {
-            Toast.makeText(this, "Bạn hãy nhập nội dung!", Toast.LENGTH_SHORT).show();
-        } else {
-            CommentRequest request = new CommentRequest(userID, foodID, content, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.d("RESPONSE COMMENT", response);
-                    if (response.equals("false")) {
-                        Toast.makeText(DetailsFoodActivity.this, "Lỗi hệ thống, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+        if (stateLogin.equals("Đăng xuất")) {
+            Food food = (Food) getIntent().getSerializableExtra("DETAIL_FOOD");
+            String userID = preferences.getString("user_id", "1");
+            String userName = preferences.getString("c", "Username");
+            String foodID = String.valueOf(food.getId());
+            String content = edtComment.getText().toString().trim();
+
+            if (content.equals("")) {
+                Toast.makeText(this, "Bạn hãy nhập nội dung!", Toast.LENGTH_SHORT).show();
+            } else {
+                CommentRequest request = new CommentRequest(userID, foodID, content, userName, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("RESPONSE COMMENT", response);
+                        if (response.equals("false")) {
+                            Toast.makeText(DetailsFoodActivity.this, "Lỗi hệ thống, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
-            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            queue.add(request);
+                });
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                queue.add(request);
 
-            //handle listview
-            listComment.add(new Comment(userName, content));
-            adapter.notifyDataSetChanged();
-            edtComment.setText("");
+                //handle listview
+                listComment.add(new Comment(userName, content));
+                adapter.notifyDataSetChanged();
+                edtComment.setText("");
 
+            }
+        } else {
+            Toast.makeText(this, "Bạn chưa đăng nhập", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void getComment() {
@@ -175,7 +183,8 @@ public class DetailsFoodActivity extends AppCompatActivity implements View.OnCli
                     String userID = "";
                     String foodID = "";
                     String content = "";
-                    String userName = preferences.getString("c", "Username");
+                    //String userName = preferences.getString("c", "Username");
+                    String userName = "";
 
                     for (int i = 0; i < response.length(); i++) {
                         try {
@@ -184,6 +193,7 @@ public class DetailsFoodActivity extends AppCompatActivity implements View.OnCli
                             userID = jsonObject.getString("user_id");
                             foodID = jsonObject.getString("food_id");
                             content = jsonObject.getString("content");
+                            userName = jsonObject.getString("username");
 
                             if (foodID.equals(idFood)) {
                                 listComment.add(new Comment(userName, content));
